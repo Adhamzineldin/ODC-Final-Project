@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f8fa;
+  background-color: #f3f3f3; /* Amazon uses a light grey background */
 }
 
 .login-box {
@@ -24,7 +24,7 @@
 
 .login-title {
   font-size: 24px;
-  color: #14171a;
+  color: #111; /* Darker grey text */
   margin-bottom: 30px;
 }
 
@@ -35,25 +35,25 @@
 .login-form input {
   width: 100%;
   padding: 15px;
-  border: 1px solid #e1e8ed;
-  border-radius: 30px;
-  background-color: #f5f8fa;
+  border: 1px solid #d6d6d6; /* Slightly darker border */
+  border-radius: 5px; /* Squarer corners to match Amazon's form design */
+  background-color: #f3f3f3;
   font-size: 16px;
   outline: none;
   box-sizing: border-box; /* Ensure padding is included in total width */
 }
 
 .login-form input:focus {
-  border-color: #1da1f2;
+  border-color: #e77600; /* Amazon orange on focus */
   background-color: #ffffff;
 }
 
 .login-btn {
-  background-color: #1da1f2;
+  background-color: #ff9900; /* Amazon's signature orange */
   color: #ffffff;
   border: none;
   padding: 15px;
-  border-radius: 30px;
+  border-radius: 5px; /* Squarer button corners */
   width: 100%;
   font-size: 16px;
   font-weight: bold;
@@ -64,7 +64,7 @@
 }
 
 .login-btn:hover {
-  background-color: #1991db;
+  background-color: #e77600; /* Slightly darker on hover */
 }
 
 .login-options {
@@ -75,7 +75,7 @@
 
 .forgot-password,
 .sign-up {
-  color: #1da1f2;
+  color: #0073e6; /* Amazon's link blue */
   text-decoration: none;
 }
 

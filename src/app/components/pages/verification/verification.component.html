@@ -1,0 +1,30 @@
+<div class="verification-container">
+  <div class="verification-box">
+    <img src="/images/nav/logo.png" alt="Logo" class="logo-img" />
+    <h2 class="verification-title">Verify Your Email</h2>
+    <p class="verification-instructions">
+      Please enter the verification code sent to your email:
+      <strong>{{ email }}</strong>
+    </p>
+
+    <form class="verification-form" (ngSubmit)="onVerify()">
+      <div class="form-group">
+        <input
+          type="text"
+          placeholder="Enter Verification Code"
+          [(ngModel)]="verificationCode"
+          name="verificationCode"
+          required
+        />
+      </div>
+
+      <button type="submit" class="verification-btn">Verify</button>
+
+      <div class="verification-options">
+        <p>Didn't receive the code?
+          <a (click)="resentCode()">Resend Code</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

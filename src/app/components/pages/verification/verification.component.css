@@ -1,0 +1,96 @@
+/* Verification Component Styles */
+.verification-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f3f3f3; /* Consistent light grey background */
+}
+
+.verification-box {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.verification-title {
+  font-size: 24px;
+  color: #111; /* Dark text color */
+  margin-bottom: 20px;
+}
+
+.verification-instructions {
+  font-size: 16px;
+  color: #555; /* Slightly lighter text for instructions */
+  margin-bottom: 30px;
+}
+
+.verification-form .form-group {
+  margin-bottom: 20px;
+}
+
+.verification-form input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #d6d6d6; /* Consistent border style */
+  border-radius: 5px; /* Squarer corners */
+  background-color: #f3f3f3;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.verification-form input:focus {
+  border-color: #e77600; /* Focus color */
+  background-color: #ffffff; /* Background change on focus */
+}
+
+.verification-btn {
+  background-color: #ff9900; /* Amazon’s signature orange */
+  color: #ffffff;
+  border: none;
+  padding: 15px;
+  border-radius: 5px; /* Squarer button corners */
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.verification-btn:hover {
+  background-color: #e77600; /* Slightly darker on hover */
+}
+
+.verification-options {
+  font-size: 14px;
+  color: #0073e6; /* Link color */
+}
+
+.verification-options .resend-link {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.verification-options .resend-link:hover {
+  text-decoration: underline;
+}
+
+.verification-box {
+  transform: scale(0.9);
+  opacity: 0;
+  animation: fadeIn 0.6s forwards; /* Fade-in effect */
+}
+
+@keyframes fadeIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

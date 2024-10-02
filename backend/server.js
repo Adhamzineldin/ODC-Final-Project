@@ -1,28 +1,47 @@
 const express = require('express');
-const app = express();
-const port = 1338;
-const mongoose = require('mongoose');
-const scoresRoutes = require('./routes/scoresRoutes');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const productRoutes = require('./routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const imageRoutes = require('./routes/imageRoutes');
+const os = require('os');
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
+dotenv.config();
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-
-mongoose.connect('mongodb://localhost:27017/FinalProject').then(() => {
-  console.log('Connected to Database');
-})
-
-app.use(express.json());
+const app = express();
 app.use(cors());
+app.use(express.json());
 
 
-app.use('/', (req, res, next) => {
-  res.send('Server is running');
+connectDB().then(r => console.log('Connected to MongoDB'));
+
+app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes);
+// Use image routes for handling uploads
+app.use('/api/images', imageRoutes);
+app.use('/api/images', express.static(path.join(__dirname, 'public/images')));
+
+
+
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  for (let interface in interfaces) {
+    for (let addr of interfaces[interface]) {
+      if (addr.family === 'IPv4' && !addr.internal) {
+        return addr.address;
+      }
+    }
+  }
+  return 'localhost';
+}
+
+const hostIP = getLocalIP();
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://${hostIP}:${PORT}`);
 });
-
-
-
-
-

@@ -1,8 +1,13 @@
 <nav class="navbar">
   <div class="navbar-logo">
     <a href="#">
-      <img src="assets/images/nav/logo.png" alt="Logo" class="logo-img" />
+      <img src="/images/nav/logo.png" alt="Logo" class="logo-img" />
     </a>
+  </div>
+
+  <div class="navbar-search">
+    <input type="text" placeholder="Search for products" />
+    <button class="search-btn"><i class="fas fa-search"></i></button>
   </div>
 
   <ul class="navbar-links">
@@ -13,26 +18,18 @@
     </li>
     <li>
       <a href="#">
-        <i class="fas fa-hashtag"></i> Explore
+        <i class="fas fa-tags"></i> Categories
       </a>
     </li>
     <li>
       <a href="#">
-        <i class="fas fa-bell"></i> Notifications
+        <i class="fas fa-shopping-cart"></i> Cart
       </a>
     </li>
     <li>
-      <a href="#">
-        <i class="fas fa-user"></i> Profile
+      <a [routerLink]="[getAccountRoute()]">
+        <i class="fas fa-user"></i>  {{getNavName()}}
       </a>
     </li>
   </ul>
-
-  <div class="navbar-search">
-    <input type="text" placeholder="Search Twitter" />
-  </div>
-
-  <div class="navbar-tweet">
-    <button class="tweet-btn">Tweet</button>
-  </div>
 </nav>
