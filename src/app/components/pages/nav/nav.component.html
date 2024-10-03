@@ -16,16 +16,17 @@
         <i class="fas fa-home"></i> Home
       </a>
     </li>
-    <li>
-      <a href="#">
-        <i class="fas fa-tags"></i> Categories
-      </a>
-    </li>
-    <li>
-      <a href="#">
+    <li *ngIf="getIsLoggedIn()">
+      <a [routerLink]="['/cart']">
         <i class="fas fa-shopping-cart"></i> Cart
       </a>
     </li>
+     <li *ngIf="getIsLoggedIn()">
+      <a (click)="signOut()">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </a>
+    </li>
+
     <li>
       <a [routerLink]="[getAccountRoute()]">
         <i class="fas fa-user"></i>  {{getNavName()}}

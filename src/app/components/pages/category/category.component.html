@@ -3,7 +3,7 @@
   <div class="products-container" *ngIf="products.length > 0; else noProducts">
     <div class="product-card" *ngFor="let product of products">
       <div class="product-image">
-        <img src="{{getLink(product.images[0])}}" [alt]="product.title" />
+        <img src="{{ getLink(product.images[0]) }}" [alt]="product.title" />
       </div>
       <div class="product-details">
         <h3 class="product-title">{{ product.title }}</h3>
@@ -12,7 +12,7 @@
           <span class="rating-count">({{ product.ratingCount }})</span>
         </div>
         <div class="product-price">{{ product.price | currency:'USD' }}</div>
-        <a [routerLink]="['/product', product.id]" class="product-link">View Details</a>
+        <a [routerLink]="['/product', product.productId]" class="product-link">View Details</a>
       </div>
     </div>
   </div>

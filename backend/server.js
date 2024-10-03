@@ -23,7 +23,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 // Use image routes for handling uploads
 app.use('/api/images', imageRoutes);
-app.use('/api/images', express.static(path.join(__dirname, 'public/images')));
+app.use('/api/images', express.static(path.join(__dirname, 'public/uploads')));
 
 
 

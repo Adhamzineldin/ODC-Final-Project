@@ -34,7 +34,7 @@ export class SignupComponent {
     }
 
     const userData: User = {
-      id: 0,
+      userId: 0,
       username: this.username,
       email: this.email,
       password: this.password,
@@ -42,19 +42,21 @@ export class SignupComponent {
       lastName: this.lastName,
       createdAt: new Date(),
       isActive: true,
-      roles: ['user']
+      roles: ['user'],
+      cart: []
     };
 
     this.authService.register(userData).subscribe({
       next: (response) => {
-        const code = (Math.random() * 1000000).toString();
-        this.authService.sendCodeToEmail(this.email, code)
+        const randomInt = Math.floor(Math.random() * 1000000);
+        const code = randomInt.toString();
+        this.authService.sendCodeToEmail(this.email, code).subscribe();
         // Redirect to verification route after successful registration
         this.router.navigate(['/verification'], {state: {email: this.email, code}});
       },
       error: (error) => {
         console.error('Error registering user:', error);
-        alert('Registration failed! Please try again.');
+        alert('Registration failed! ' + error.message);
       }
     });
   }

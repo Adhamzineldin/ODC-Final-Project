@@ -4,8 +4,8 @@ import { NavComponent } from "../nav/nav.component";
 import { CategoryComponent } from "../category/category.component";
 import { RouterOutlet } from "@angular/router";
 import { NgForOf } from "@angular/common";
-import {AppComponent} from "../../../app.component";
-import {AuthService} from "../../../../services/product/auth.service";
+import { AppComponent } from "../../../app.component";
+import { AuthService } from "../../../../services/product/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -19,7 +19,6 @@ import {AuthService} from "../../../../services/product/auth.service";
   ],
   styleUrls: ['./home.component.css']
 })
-
 export class HomeComponent implements OnInit {
   categories: any[] = []; // Holds categories
   productsByCategory: { [key: string]: any[] } = {}; // Holds products for each category
@@ -48,7 +47,7 @@ export class HomeComponent implements OnInit {
 
   // Function to get products by category and cache the results
   getProductsByCategory(categoryName: string) {
-    console.log(`Getting products for category ${this.productsByCategory}`);
+    console.log(`Getting products for category ${categoryName}`);
     if (!this.productsByCategory[categoryName]) { // Check if products are already loaded for this category
       this.productService.getProductsByCategory(categoryName).subscribe(
         (data) => {

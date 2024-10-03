@@ -16,37 +16,39 @@ export class VerificationComponent {
   email: string = '';
   verificationCode: string = '';
   code: string = '';
+  state: string = '';
 
    constructor(private authService: AuthService, private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state) {
       this.email = navigation.extras.state['email'];
       this.code = navigation.extras.state['code'];
+      this.code = Math.floor(Number(this.code)).toString();
     }
   }
 
    onVerify() {
+     console.log('Verification code:', this.code);
     if (this.verificationCode === this.code) {
       this.authService.verifyEmail(this.email).subscribe(
         (response) => {
-          if (response.status === 'success') {
-            this.router.navigate(['/login']);
-          }
-        },
-        (error) => {
-          console.log('Error verifying email', error);
+        this.router.navigate(['/login']);
         }
       );
     }
     else {
-      console.log('Invalid verification code');
+      this.state = ('Invalid verification code');
     }
   }
 
 
   resentCode() {
-     const newCode = (Math.random() * 1000000).toString();
-    this.authService.sendCodeToEmail(this.email, newCode);
+     const randomInt = Math.floor(Math.random() * 1000000);
+        const newCode = randomInt.toString();
+        this.code = newCode;
+         this.state = 'Sent new code to email';
+    this.authService.sendCodeToEmail(this.email, newCode).subscribe();
 
   }
+
 }

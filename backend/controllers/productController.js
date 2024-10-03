@@ -13,7 +13,7 @@ exports.getAllProducts = async (req, res) => {
 
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({ id: req.params.id });
+    const product = await Product.findOne({ productId: req.params.id });
     if (product) {
       res.status(200).json(product);
     } else {
@@ -24,25 +24,23 @@ exports.getProductById = async (req, res) => {
   }
 };
 
-
 exports.addProduct = async (req, res) => {
   try {
-    // Check if req.body is an array
+    // Check if req.body is an array, otherwise wrap it in an array
     const products = Array.isArray(req.body) ? req.body : [req.body];
 
     const savedProducts = [];
 
     for (let product of products) {
       const {
-        id,
-        title = 'Unknown',
-        price = 0,
+        title,
+        price,
         description,
-        category = 'Unknown',
-        brand = 'Unknown',
-        stock = 0,
-        rating = 5,
-        ratingCount = 1,
+        category,
+        brand,
+        stock,
+        rating ,
+        ratingCount,
         tags,
         dimensions,
         sku,
@@ -62,19 +60,17 @@ exports.addProduct = async (req, res) => {
         return res.status(400).json({ message: 'Title and price are required' });
       }
 
-      // Check for existing product ID
-      const existingProduct = await Product.findOne({ id });
-      if (existingProduct) {
-        return res.status(409).json({ message: `Product with ID ${id} already exists.` });
-      }
+      // Collect uploaded image filenames (check if req.files is defined)
+      const imageFilenames = req.files ? req.files.map(file => `/${file.filename}`) : [];
 
-      // Collect uploaded image filenames
-      const imageFilenames = req.files.map(file => `/${file.filename}`);
+      // Check if images are provided in the request body
+      const imageLinks = product.images ? product.images.filter(image => typeof image === 'string' && image.startsWith('http')) : [];
 
+      // Combine uploaded image filenames and HTTP image links
+      const allImages = [...imageFilenames, ...imageLinks];
 
       // Create new Product
       const newProduct = new Product({
-        id,
         title,
         price,
         description,
@@ -93,7 +89,7 @@ exports.addProduct = async (req, res) => {
         returnPolicy,
         minimumOrderQuantity,
         meta,
-        images: imageFilenames, // Store the uploaded image filenames
+        images: allImages, // Store both uploaded and HTTP image links
         thumbnail,
         reviews
       });
@@ -110,6 +106,7 @@ exports.addProduct = async (req, res) => {
   }
 };
 
+
 exports.addReview = async (req, res) => {
     const productId = req.params.id;
     const { comment, rating, reviewerName, reviewerEmail } = req.body; // Destructure the required fields
@@ -121,7 +118,7 @@ exports.addReview = async (req, res) => {
 
     try {
         // Find the product and add the review
-        const product = await Product.findOne({ id: productId });
+        const product = await Product.findOne({ productId: productId });
 
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });

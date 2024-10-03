@@ -2,6 +2,7 @@
   <app-category
     *ngFor="let category of categories"
     [categoryTitle]="category"
-    [products]="productsByCategory[category]"
-  ></app-category>
+    [products]="productsByCategory[category] || []">
+
+  </app-category>
 </div>

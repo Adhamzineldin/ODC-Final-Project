@@ -6,6 +6,7 @@
       Please enter the verification code sent to your email:
       <strong>{{ email }}</strong>
     </p>
+    <p class="verification-instructions" style="color: red">{{state}}</p>
 
     <form class="verification-form" (ngSubmit)="onVerify()">
       <div class="form-group">

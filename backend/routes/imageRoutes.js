@@ -7,7 +7,7 @@ router.get('/:filename', (req, res) => {
   const filePath = join(__dirname, '../public/uploads', req.params.filename);
   res.sendFile(filePath, (err) => {
     if (err) {
-      res.status(404).json({ message: 'Image not found' });
+      res.status(404).json({ message: err });
     }
   });
 });

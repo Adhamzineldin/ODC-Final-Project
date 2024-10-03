@@ -6,6 +6,9 @@ import {ProductService} from "../../../../services/product/product.service";
 import {AppComponent} from "../../../app.component";
 import {FormsModule} from "@angular/forms";
 import { AuthService } from '../../../../services/product/auth.service';
+
+
+
 @Component({
   selector: 'app-single-product',
   templateUrl: './single-product.component.html',
@@ -56,6 +59,7 @@ export class SingleProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.authService.getCurrentUser());
     this.displayProductDetails();
     const currentUser = this.authService.getCurrentUser();
         if (currentUser) {
@@ -95,6 +99,15 @@ export class SingleProductComponent implements OnInit {
                 const descriptionElement = this.createDescriptionElement(product.description);
                 this.renderer.appendChild(container, descriptionElement);
               }
+              const addToCartButton = this.renderer.createElement('button');
+    this.renderer.addClass(addToCartButton, 'add-to-cart-btn'); // Use your CSS class name
+    addToCartButton.textContent = 'Add to Cart';
+
+    // Add click event listener
+    this.renderer.listen(addToCartButton, 'click', () => this.addToCart(product.productId));
+
+    // Append the button to the container
+    this.renderer.appendChild(container, addToCartButton);
 
               const detailsGrid = this.createDetailsGrid(product);
               this.renderer.appendChild(container, detailsGrid);
@@ -304,7 +317,7 @@ submitReview(): void {
     }
 
     if (this.newReview.comment.trim()) {
-        this.productService.addReview(this.product?.id.toString(), this.newReview).subscribe(
+        this.productService.addReview(this.product?.productId.toString(), this.newReview).subscribe(
             (response) => {
                 console.log('Review submitted successfully:', response);
                 // Clear the inputs after submission
@@ -374,6 +387,24 @@ private createReviewForm(): HTMLElement {
 
 
 
+  // Function to add item to the cart
+  addToCart(productId: number): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.addProductToCart(productId).subscribe(
+        (response) => {
+          console.log('Product added to cart:', response);
+          alert('Product added to cart successfully');
+        },
+        (error) => {
+          console.error('Error adding product to cart:', error);
+          alert(error.message);
+        }
+      );
+    }
+    else {
+      alert('Please log in to add items to the cart');
+    }
+  }
 
 
 }

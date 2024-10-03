@@ -1,41 +1,57 @@
-import { Component } from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import {Component, OnInit} from '@angular/core';
+import {NgIf, NgOptimizedImage} from "@angular/common";
 import {AppComponent} from "../../../app.component";
 import {User} from "../../../../services/models/userModel";
 import {AuthService} from "../../../../services/product/auth.service";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-nav',
   standalone: true,
   imports: [
     NgOptimizedImage,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
-  user: User | null;
+export class NavComponent  {
+  user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  constructor(private authService: AuthService) {
-    this.user = authService.getCurrentUser();
+  constructor( private router: Router) {
   }
+
+
+
   getNavName() {
-    if (this.authService.isLoggedIn()) {
-      return this.authService.getCurrentUser()?.firstName;
-    } else {
-      return 'Login';
+    if (this.getIsLoggedIn()) {
+       return this.user.firstName + ' ' + this.user.lastName;
     }
+    return 'Login';
+
   }
 
+  getIsLoggedIn() {
+    return this.user;
+  }
+
+   signOut() {
+    localStorage.removeItem('user');
+    this.user = null;
+    this.router.navigate(['/']);
+     window.location.href = '/';
+
+   }
   getAccountRoute() {
-    if (this.authService.isLoggedIn()) {
-      return '/account';
+    if (this.getIsLoggedIn()) {
+      return '/';
     } else {
       return '/login';
     }
+
   }
+
 
 
 

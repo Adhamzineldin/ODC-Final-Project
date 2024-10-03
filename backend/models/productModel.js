@@ -28,43 +28,46 @@ const dimensionsSchema = new mongoose.Schema({
   width: {
     type: Number,
     required: true,
+
   },
   height: {
     type: Number,
-    required: true,
+required: true,
   },
   depth: {
     type: Number,
-    required: true,
+required: true,
   },
 });
 
 const productSchema = new mongoose.Schema({
-  id: {
-    type: Number,
-    unique: true,
-  },
+   productId: { type: Number, unique: true },
   title: {
     type: String,
     required: true,
   },
   description: {
     type: String,
+    default: 'No description available',
   },
   category: {
     type: String,
+    default : 'Uncategorized'
   },
   price: {
     type: Number,
+    required: true,
   },
   discountPercentage: {
     type: Number,
   },
   rating: {
     type: Number,
+    default: 5,
   },
   stock: {
     type: Number,
+    default : 0
   },
   tags: [
     {
@@ -73,6 +76,7 @@ const productSchema = new mongoose.Schema({
   ],
   brand: {
     type: String,
+    default: 'Unknown',
   },
   sku: {
     type: String,
@@ -100,7 +104,7 @@ const productSchema = new mongoose.Schema({
   },
   ratingCount: {
     type: Number,
-    default: 0,
+    default: 1,
   },
   images: [
     {
@@ -114,6 +118,6 @@ const productSchema = new mongoose.Schema({
   timestamps: true, // Enable automatic `createdAt` and `updatedAt` fields
 });
 
-productSchema.plugin(AutoIncrement, { inc_field: 'id' }); // Enable auto-increment for the 'id' field
+productSchema.plugin(AutoIncrement, { inc_field: 'productId' }); // Enable auto-increment for the 'id' field
 
 module.exports = mongoose.model('Product', productSchema);
