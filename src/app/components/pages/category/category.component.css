@@ -110,3 +110,12 @@
   background-color: #c82333; /* Darker red on hover */
 }
 
+@media (max-width: 768px) {
+  .products-container {
+    justify-content: center; /* Center items on smaller screens */
+  }
+
+  .product-card {
+    width: 100%; /* Make cards full width */
+  }
+}

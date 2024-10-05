@@ -1,8 +1,9 @@
 /* Overall Admin Page */
 .admin-page {
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: #f9f9f9; /* Softer background for a clean look */
   font-family: 'Arial', sans-serif;
+  min-height: 100vh; /* Ensures the admin page takes up full height */
 }
 
 /* Tabs */
@@ -13,30 +14,32 @@
 }
 
 .tab-button {
-  background-color: #007bff;
+  background-color: #007bff; /* Primary color */
   color: white;
   padding: 12px 24px;
   border: none;
-  border-radius: 50px;
+  border-radius: 25px; /* More rounded for a modern feel */
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
 .tab-button.active {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker for active state */
   transform: scale(1.1);
 }
 
 .tab-button:not(.active):hover {
-  background-color: #0069d9;
+  background-color: #0069d9; /* Hover effect */
 }
 
+/* Tab Content */
 .tab-content {
   padding: 25px;
   border-radius: 10px;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: opacity 0.3s ease;
 }
 
@@ -49,21 +52,23 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #555; /* Softer color for labels */
 }
 
 input,
 textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px; /* Increased padding for comfort */
   border-radius: 5px;
   border: 1px solid #ddd;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus,
 textarea:focus {
   border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Soft glow effect */
 }
 
 textarea {
@@ -81,12 +86,13 @@ textarea {
 .btn-primary {
   background-color: #28a745;
   color: white;
-  padding: 10px 15px;
+  padding: 12px 20px; /* Increased padding for better clickability */
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 .btn-primary:hover {
@@ -98,12 +104,13 @@ textarea {
 .btn-delete {
   background-color: #dc3545;
   color: white;
-  padding: 10px 15px;
+  padding: 12px 20px; /* Increased padding for better clickability */
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
 .btn-delete:hover {
@@ -117,20 +124,27 @@ textarea {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-around;
+  margin-top: 20px; /* Space above product list */
 }
 
 .product-item {
-  flex: 0 1 calc(33.333% - 40px);
+  flex: 0 1 calc(33.333% - 40px); /* Responsive width with gap */
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Stack image and details vertically */
+  justify-content: space-between; /* Space between content */
+  height: 100%; /* Ensure uniform height */
 }
 
 .product-item img {
   width: 100%;
+  height: 150px; /* Fixed height to maintain uniformity */
+  object-fit: contain; /* Maintain aspect ratio without cropping */
   border-radius: 10px;
   margin-bottom: 15px;
 }
@@ -143,6 +157,7 @@ textarea {
 
 .product-item:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 /* Stock Input Styling */
@@ -158,4 +173,48 @@ textarea {
 .stock-input:focus {
   border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Soft glow effect */
 }
+
+
+/* Image Previews Styling */
+.image-previews {
+  margin-top: 20px; /* Space above the image previews */
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping of images */
+  gap: 15px; /* Space between image items */
+}
+
+.image-preview-item {
+  flex: 1 1 calc(33.333% - 15px); /* Three items per row with space */
+  max-width: calc(33.333% - 15px); /* Ensure uniformity */
+  overflow: hidden; /* Hide overflow */
+  border: 1px solid #ddd; /* Light border around image */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.image-preview-item img {
+  width: 100%; /* Full width of the container */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Cover the area while maintaining aspect ratio */
+  display: block; /* Prevent inline spacing issues */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .product-item {
+    flex: 0 1 100%; /* Full width for mobile */
+  }
+
+  .tab-button {
+    font-size: 14px; /* Adjust button size for smaller screens */
+    padding: 10px 20px; /* Adjust padding */
+  }
+}
+

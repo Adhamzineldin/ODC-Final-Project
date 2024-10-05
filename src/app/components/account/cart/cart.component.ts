@@ -150,7 +150,7 @@ export class CartComponent implements OnInit {
 
           // Generate email content after the order has been created
           const emailContent = this.generateEmailContent(newOrder, response.orderNumber);
-          console.log('Email content:', emailContent);
+          
           // Assuming response contains orderNumber
           this.authService.sendEmail(userId, await emailContent).subscribe(
             (emailResponse) => {
@@ -181,7 +181,6 @@ export class CartComponent implements OnInit {
 
     let productsHtml = '';
 
-    console.log('orderData', orderData);
 
     // Fetch product details for each product in the order
     if (Array.isArray(orderData.products) && orderData.products.length > 0) {

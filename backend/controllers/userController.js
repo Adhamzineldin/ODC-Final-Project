@@ -440,8 +440,7 @@ exports.getOrder = async (req, res) => {
 
 exports.sendOrderDetailsEmail = async (req, res) => {
   const {email, htmlContent} = req.body; // Extract email and htmlContent from the request body
-  console.log(req.body);
-
+  console.log("sending order", email);
   // Create transporter
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
