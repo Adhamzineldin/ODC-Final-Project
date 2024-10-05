@@ -1,12 +1,12 @@
 <nav class="navbar">
   <div class="navbar-logo">
     <a href="#">
-      <img src="/images/nav/logo.png" alt="Logo" class="logo-img" />
+      <img src="/images/nav/logo.png" alt="Logo" class="logo-img"/>
     </a>
   </div>
 
   <div class="navbar-search">
-    <input type="text" placeholder="Search for products" />
+    <input type="text" placeholder="Search for products"/>
     <button class="search-btn"><i class="fas fa-search"></i></button>
   </div>
 
@@ -21,7 +21,7 @@
         <i class="fas fa-shopping-cart"></i> Cart
       </a>
     </li>
-     <li *ngIf="getIsLoggedIn()">
+    <li *ngIf="getIsLoggedIn()">
       <a (click)="signOut()">
         <i class="fas fa-sign-out-alt"></i> Sign Out
       </a>
@@ -29,7 +29,13 @@
 
     <li>
       <a [routerLink]="[getAccountRoute()]">
-        <i class="fas fa-user"></i>  {{getNavName()}}
+        <i class="fas fa-user"></i>  {{ getNavName() }}
+      </a>
+    </li>
+
+    <li *ngIf="isAdmin">
+      <a [routerLink]="['/admin']">
+        <i class="fas fa-user-shield"></i> Admin
       </a>
     </li>
   </ul>

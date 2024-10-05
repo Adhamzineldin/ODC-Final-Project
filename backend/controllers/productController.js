@@ -29,6 +29,9 @@ exports.addProduct = async (req, res) => {
     // Check if req.body is an array, otherwise wrap it in an array
     const products = Array.isArray(req.body) ? req.body : [req.body];
 
+    console.log(req.body);
+
+
     const savedProducts = [];
 
     for (let product of products) {
@@ -93,6 +96,7 @@ exports.addProduct = async (req, res) => {
         thumbnail,
         reviews
       });
+      console.log('newproduct', newProduct);
 
       const savedProduct = await newProduct.save();
       savedProducts.push(savedProduct);
@@ -149,5 +153,29 @@ exports.addReview = async (req, res) => {
     } catch (error) {
         console.error('Error adding review:', error);
         res.status(500).json({ message: error });
+    }
+};
+
+exports.deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id; // Get the product ID from the request parameters
+
+        // Check if product ID is provided
+        if (!productId) {
+            return res.status(400).json({ message: 'Product ID is required' });
+        }
+
+        // Find the product by ID and delete it
+        const deletedProduct = await Product.findOneAndDelete({ productId: productId });
+
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Return a success response
+        res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).json({ message: 'Internal server error', error });
     }
 };

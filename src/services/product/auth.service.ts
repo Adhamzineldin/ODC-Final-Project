@@ -11,46 +11,47 @@ import {Product} from "../models/productModel";
 })
 
 export class AuthService {
-    private user: User | null;
-    private nodemailer: any
-    private tokenSubject = new BehaviorSubject<string | null>(null);
-    public token$ = this.tokenSubject.asObservable();
-    constructor(private http: HttpClient) {
+  private user: User | null;
+  private nodemailer: any
+  private tokenSubject = new BehaviorSubject<string | null>(null);
+  public token$ = this.tokenSubject.asObservable();
 
-        this.user = JSON.parse(localStorage.getItem('user') || 'null');
-        console.log('AuthService initialized. Current user:', this.user);
-    }
+  constructor(private http: HttpClient) {
+
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
+    console.log('AuthService initialized. Current user:', this.user);
+  }
 
 
+  getCurrentUser(): User | null {
+    return this.user; // Return user data
+  }
 
-    getCurrentUser(): User | null {
-        return this.user; // Return user data
-    }
+  // Method to set user when logged in
+  setUser(userData: User | null) {
+    this.user = userData;
+    localStorage.setItem('user', JSON.stringify(userData)); // Store user data
+  }
 
-    // Method to set user when logged in
-    setUser(userData: User | null) {
-          this.user = userData;
-          localStorage.setItem('user', JSON.stringify(userData)); // Store user data
-    }
+  register(userData: User): Observable<any> {
+    userData.username = userData.username.toLowerCase();
+    return this.http.post(`${AppComponent.api}/users/register`, userData);
+  }
 
-   register(userData: User): Observable<any> {
-      userData.username = userData.username.toLowerCase();
-      return this.http.post(`${AppComponent.api}/users/register`, userData);
-    }
-    verifyEmail(email: string): Observable<any> {
-    return this.http.post<{message: string}>(`${AppComponent.api}/users/verify-email`, { email }).pipe(
-        map(response => {
-            // Check for the success condition from the response
-            if (response.message  === 'success') {
-                return { success: true, message: 'Email verification successful' };
-            }
-            return { success: false, message: 'Email verification failed' }; // Handle failure case
-        })
+  verifyEmail(email: string): Observable<any> {
+    return this.http.post<{ message: string }>(`${AppComponent.api}/users/verify-email`, {email}).pipe(
+      map(response => {
+        // Check for the success condition from the response
+        if (response.message === 'success') {
+          return {success: true, message: 'Email verification successful'};
+        }
+        return {success: false, message: 'Email verification failed'}; // Handle failure case
+      })
     );
-}
+  }
 
-    sendCodeToEmail(email: string, code: string): Observable<any> {
-     const payload = { email, code };
+  sendCodeToEmail(email: string, code: string): Observable<any> {
+    const payload = {email, code};
 
     return this.http.post(`${AppComponent.api}/users/send-verification-code`, payload)
       .pipe(
@@ -63,8 +64,8 @@ export class AuthService {
 
 
   login(email: string, password: string): Observable<any> {
-      email = email.toLowerCase();
-    return this.http.post<{ token: string , user: User}>(`${AppComponent.api}/users/login`, { email, password }).pipe(
+    email = email.toLowerCase();
+    return this.http.post<{ token: string, user: User }>(`${AppComponent.api}/users/login`, {email, password}).pipe(
       map(response => {
 
         this.setUser(response.user);
@@ -104,34 +105,35 @@ export class AuthService {
   }
 
   addProductToCart(productId: number): Observable<any> {
-      console.log('productId', productId);
-      let userId = this.getCurrentUser()?.userId;
+    console.log('productId', productId);
+    let userId = this.getCurrentUser()?.userId;
 
-    const body = { userId, productId };
+    const body = {userId, productId};
     return this.http.post<any>(`${AppComponent.api}/users/add-to-cart`, body);
   }
 
 
-   getCart(): Observable<any> {
-     return this.http.get <any>(`${AppComponent.api}/users/cart/${this.getCurrentUser()?.userId}`);
-   }
-   getProductDetails(productId: number): Observable<any> {
-    return this.http.get<any>(`${AppComponent.api}/products/product/${productId}`);
-   }
+  getCart(): Observable<any> {
+    return this.http.get <any>(`${AppComponent.api}/users/cart/${this.getCurrentUser()?.userId}`);
+  }
 
-   updateUserCart(updatedCart: { productId: number, quantity: number }[]) {
-  const userId = this.getCurrentUser()?.userId; // Assuming you have a method to get the user's ID
-  return this.http.put(`${AppComponent.api}/users/cart/${userId}`, { updatedCart });
+  getProductDetails(productId: number): Observable<any> {
+    return this.http.get<any>(`${AppComponent.api}/products/product/${productId}`);
+  }
+
+  updateUserCart(updatedCart: { productId: number, quantity: number }[]) {
+    const userId = this.getCurrentUser()?.userId; // Assuming you have a method to get the user's ID
+    return this.http.put(`${AppComponent.api}/users/cart/${userId}`, {updatedCart});
   }
 
   // Change password
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
     const email = this.getCurrentUser()?.email;
-    return this.http.put(`${AppComponent.api}/users/update-password`, {email, oldPassword, newPassword });
+    return this.http.put(`${AppComponent.api}/users/update-password`, {email, oldPassword, newPassword});
   }
 
   updateOrder(userId: number, updatedOrder: any): Observable<any> {
-      console.log('updatedOrder', updatedOrder);
+    console.log('updatedOrder', updatedOrder);
     return this.http.put<any>(`${AppComponent.api}/users/orders/${userId}`, {"updatedOrder": updatedOrder});
   }
 
@@ -142,12 +144,12 @@ export class AuthService {
 
 
   getOrderDetails(orderNumber: string) {
-      const userId = this.getCurrentUser()?.userId;
+    const userId = this.getCurrentUser()?.userId;
     return this.http.get<any>(`${AppComponent.api}/users/orders/order/${userId}?orderNumber=${orderNumber}`);
   }
 
 //   admin
-   getUsers(): Observable<any[]> {
+  getUsers(): Observable<any[]> {
     return this.http.get<any[]>(AppComponent.api);
   }
 
@@ -155,16 +157,21 @@ export class AuthService {
     return this.http.delete<void>(`${AppComponent.api}/${userId}/deactivate`);
   }
 
-  addProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(AppComponent.api, product);
+  addProduct(product: FormData): Observable<Product> {
+    console.log('product', product);
+    return this.http.post<Product>(`${AppComponent.api}/products`, product);
   }
 
   deleteProduct(productId: number): Observable<void> {
-    return this.http.delete<void>(`${AppComponent.api}/${productId}`);
+    return this.http.delete<void>(`${AppComponent.api}/products/product/${productId}`);
   }
 
 
   getProducts() {
-     return this.http.get<Product[]>(`${AppComponent.api}/products`)
+    return this.http.get<Product[]>(`${AppComponent.api}/products`)
+  }
+
+  isAdmin() {
+    return this.getCurrentUser()?.roles.includes('admin');
   }
 }

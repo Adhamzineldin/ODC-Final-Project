@@ -1,42 +1,58 @@
 <div class="admin-page">
   <div class="tabs">
-    <button class="tab-button" [class.active]="selectedTab === 'addProduct'" (click)="selectTab('addProduct')">Add Product</button>
-    <button class="tab-button" [class.active]="selectedTab === 'deleteProduct'" (click)="selectTab('deleteProduct')">Delete Product</button>
-    <button class="tab-button" [class.active]="selectedTab === 'deactivateUsers'" (click)="selectTab('deactivateUsers')">Deactivate Users</button>
+    <button class="tab-button" [class.active]="selectedTab === 'addProduct'" (click)="selectTab('addProduct')">
+      Add Product
+    </button>
+    <button class="tab-button" [class.active]="selectedTab === 'deleteProduct'" (click)="selectTab('deleteProduct')">
+      Delete Product
+    </button>
   </div>
 
- <div *ngIf="selectedTab === 'addProduct'" class="tab-content">
-  <h2>Add New Product</h2>
-  <form (ngSubmit)="addProduct()">
-    <label for="title">Title:</label>
-    <input type="text" id="title" [(ngModel)]="newProduct.title" name="title" required>
-
-    <label for="description">Description:</label>
-    <textarea id="description" [(ngModel)]="newProduct.description" name="description"></textarea>
-
-    <label for="category">Category:</label>
-    <input type="text" id="category" [(ngModel)]="newProduct.category" name="category" required>
-
-    <label for="price">Price:</label>
-    <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required>
-
-    <label for="stock">Stock:</label>
-    <input type="number" id="stock" [(ngModel)]="newProduct.stock" name="stock" required>
-
-    <label for="images">Upload Images:</label>
-    <input type="file" id="images" (change)="onFileSelected($event)" multiple accept="image/*">
-
-    <div *ngIf="imagePreviews.length > 0" class="image-previews">
-      <h3>Image Previews:</h3>
-      <div *ngFor="let img of imagePreviews">
-        <img [src]="img" alt="Image Preview" class="img-preview">
+  <div *ngIf="selectedTab === 'addProduct'" class="tab-content">
+    <h2>Add New Product</h2>
+    <form (ngSubmit)="addProduct()">
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" [(ngModel)]="newProduct.title" name="title" required>
       </div>
-    </div>
 
-    <button type="submit">Add Product</button>
-  </form>
-</div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" [(ngModel)]="newProduct.description" name="description"></textarea>
+      </div>
 
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <input type="text" id="category" [(ngModel)]="newProduct.category" name="category" required>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" id="price" [(ngModel)]="newProduct.price" name="price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" [(ngModel)]="newProduct.stock" name="stock" required>
+      </div>
+
+      <div class="form-group">
+        <label for="images">Upload Images:</label>
+        <input type="file" id="images" (change)="onFileSelected($event)" multiple accept="image/*">
+      </div>
+
+      <div *ngIf="imagePreviews.length > 0" class="image-previews">
+        <h3>Image Previews:</h3>
+        <div class="image-preview-container">
+          <div *ngFor="let img of imagePreviews" class="image-preview-item">
+            <img [src]="img" alt="Image Preview">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">Add Product</button>
+    </form>
+  </div>
 
   <div *ngIf="selectedTab === 'deleteProduct'" class="tab-content">
     <h2>Delete Products</h2>
@@ -47,18 +63,8 @@
           <h4>{{ product.title }}</h4>
           <p><strong>Stock:</strong> {{ product.stock }}</p>
           <p><strong>Category:</strong> {{ product.category }}</p>
-          <button (click)="deleteProduct(product.productId)">Delete</button>
+          <button (click)="deleteProduct(product.productId)" class="btn-delete">Delete</button>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="selectedTab === 'deactivateUsers'" class="tab-content">
-    <h2>Deactivate Users</h2>
-    <div class="user-list">
-      <div *ngFor="let user of users" class="user-item">
-        <h4>{{ user.username }}</h4>
-        <button (click)="deactivateUser(user.userId)">Deactivate</button>
       </div>
     </div>
   </div>

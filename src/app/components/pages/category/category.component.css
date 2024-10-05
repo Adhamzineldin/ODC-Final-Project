@@ -115,3 +115,17 @@
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
 }
 
+.btn-delete {
+  background-color: #dc3545;  /* Red color for delete */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;  /* Add space below the button */
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;  /* Darker red on hover */
+}

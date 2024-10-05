@@ -16,17 +16,23 @@ import {Router, RouterLink} from "@angular/router";
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent  {
+export class NavComponent {
   user = JSON.parse(localStorage.getItem('user') || 'null');
+  isAdmin: any;
 
-  constructor( private router: Router) {
+  constructor(private router: Router) {
   }
 
+  ngOnInit() {
+    if (this.getIsLoggedIn()) {
+      this.isAdmin = this.user.roles.includes('admin');
+    }
+  }
 
 
   getNavName() {
     if (this.getIsLoggedIn()) {
-       return this.user.firstName + ' ' + this.user.lastName;
+      return this.user.firstName + ' ' + this.user.lastName;
     }
     return 'Login';
 
@@ -36,14 +42,14 @@ export class NavComponent  {
     return this.user;
   }
 
-   signOut() {
+  signOut() {
     localStorage.removeItem('user');
     this.user = null;
     window.location.href = '/';
 
 
+  }
 
-   }
   getAccountRoute() {
     if (this.getIsLoggedIn()) {
       return '/profile';
@@ -52,9 +58,6 @@ export class NavComponent  {
     }
 
   }
-
-
-
 
 
 }
