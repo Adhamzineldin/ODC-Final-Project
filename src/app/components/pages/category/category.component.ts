@@ -61,6 +61,15 @@ export class CategoryComponent {
     return fileUrl;
   }
 
+
+  confirmDelete(productId: number) {
+    const confirmation = window.confirm('Are you sure you want to delete this product? This action cannot be undone.');
+    if (confirmation) {
+      this.deleteProduct(productId); // Call the deleteProduct method if confirmed
+    }
+  }
+
+
   deleteProduct(productId: number): void {
     this.authService.deleteProduct(productId).subscribe({
       next: (response) => {

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Product } from "../../../../services/models/productModel";
-import { AuthService } from "../../../../services/product/auth.service";
+import {Component, OnInit} from '@angular/core';
+import {Product} from "../../../../services/models/productModel";
+import {AuthService} from "../../../../services/product/auth.service";
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import {FormsModule} from "@angular/forms";
 import {AppComponent} from "../../../app.component";
 import {CategoryComponent} from "../../pages/category/category.component";
 import {ProductService} from "../../../../services/product/product.service";
@@ -44,7 +44,10 @@ export class MainComponent implements OnInit {
   productsByCategory: { [key: string]: any[] } = {};
 
 
-  constructor(private authService: AuthService, private productService:ProductService) {}
+  constructor(private authService: AuthService, private productService: ProductService) {
+  }
+
+  stockIncrement: any;
 
   ngOnInit(): void {
     this.loadProducts();
@@ -90,16 +93,15 @@ export class MainComponent implements OnInit {
       );
     }
   }
-   getStars(rating: number): string {
+
+  getStars(rating: number): string {
     const filledStars = '★'.repeat(Math.floor(rating));
     const emptyStars = '☆'.repeat(5 - Math.floor(rating));
     return filledStars + emptyStars;
   }
 
 
-
-
-   onFileSelected(event: Event): void {
+  onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     if (target.files) {
       const files = Array.from(target.files);
@@ -132,11 +134,11 @@ export class MainComponent implements OnInit {
 
     // Append each selected file to FormData
     if (this.selectedFiles) {
-        this.selectedFiles.forEach((file: any) => {
-            if (file) { // Ensure the file is not undefined
-                formData.append('images', file); // Append actual file objects
-            }
-        });
+      this.selectedFiles.forEach((file: any) => {
+        if (file) { // Ensure the file is not undefined
+          formData.append('images', file); // Append actual file objects
+        }
+      });
     }
 
     this.authService.addProduct(formData).subscribe({
@@ -150,8 +152,7 @@ export class MainComponent implements OnInit {
         alert('Error adding product. Please try again later.');
       }
     });
-}
-
+  }
 
 
   deleteProduct(productId: number): void {
@@ -167,27 +168,61 @@ export class MainComponent implements OnInit {
   }
 
 
-
   selectTab(tab: string): void {
     this.selectedTab = tab; // Change selected tab
   }
 
 
-    getLink(filename: any): string {
-  let fileUrl = '';
-  filename = filename[0];
-  // Check if filename is defined and a string
-  if (typeof filename === 'string' && filename.length > 0) {
-    if (filename.startsWith('/')) {
-      fileUrl = `${AppComponent.api}/images${filename}`;  // Ensure no double slashes
+  getLink(filename: any): string {
+    let fileUrl = '';
+    filename = filename[0];
+    // Check if filename is defined and a string
+    if (typeof filename === 'string' && filename.length > 0) {
+      if (filename.startsWith('/')) {
+        fileUrl = `${AppComponent.api}/images${filename}`;  // Ensure no double slashes
+      } else {
+        fileUrl = filename;  // Use the external URL directly
+      }
     } else {
-      fileUrl = filename;  // Use the external URL directly
+      console.warn('Invalid filename provided:', filename); // Log if filename is invalid
     }
-  } else {
-    console.warn('Invalid filename provided:', filename); // Log if filename is invalid
+    return fileUrl;
   }
-  return fileUrl;
- }
+
+
+  addStock(productId: number) {
+    if (this.stockIncrement > 0) {
+      this.authService.updateProductStock(productId, this.stockIncrement).subscribe((response) => {
+        console.log('Stock updated:', response);
+        // Optionally reload products to reflect updated stock
+        this.loadProducts();
+      });
+    } else {
+      alert('Please enter a valid stock increment.');
+    }
+  }
+
+  // Function to update stock in the database (you need to implement this in your service)
+
+  private updateStockInDatabase(productId: number, newStock: number): void {
+    this.authService.updateProductStock(productId, newStock).subscribe(
+      response => {
+        console.log('Stock updated successfully', response);
+        // Handle success (optional)
+      },
+      error => {
+        console.error('Error updating stock', error);
+        // Handle error (optional)
+      }
+    );
+  }
+
+  confirmDelete(productId: number) {
+    const confirmation = window.confirm('Are you sure you want to delete this product? This action cannot be undone.');
+    if (confirmation) {
+      this.deleteProduct(productId); // Call the deleteProduct method if confirmed
+    }
+  }
 
 
   private resetNewProduct(): void {

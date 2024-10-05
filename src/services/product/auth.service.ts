@@ -10,6 +10,7 @@ import {Product} from "../models/productModel";
   providedIn: 'root'
 })
 
+
 export class AuthService {
   private user: User | null;
   private nodemailer: any
@@ -180,4 +181,10 @@ export class AuthService {
     console.log('sending email');
     return this.http.post(`${AppComponent.api}/users/sendEmail`, {htmlContent: emailContent, email});
   }
+
+  updateProductStock(productId: number, newStock: number): Observable<any> {
+    return this.http.put(`${AppComponent.api}/products/${productId}/stock`, {stock: newStock});
+  }
+
+
 }

@@ -7,20 +7,20 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({message: error});
   }
 };
 
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({ productId: req.params.id });
+    const product = await Product.findOne({productId: req.params.id});
     if (product) {
-      res.status(200).json( product);
+      res.status(200).json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({message: 'Product not found'});
     }
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({message: error});
   }
 };
 
@@ -42,7 +42,7 @@ exports.addProduct = async (req, res) => {
         category,
         brand,
         stock,
-        rating ,
+        rating,
         ratingCount,
         tags,
         dimensions,
@@ -60,7 +60,7 @@ exports.addProduct = async (req, res) => {
 
       // Check required fields
       if (!title || !price) {
-        return res.status(400).json({ message: 'Title and price are required' });
+        return res.status(400).json({message: 'Title and price are required'});
       }
 
       // Collect uploaded image filenames (check if req.files is defined)
@@ -103,79 +103,103 @@ exports.addProduct = async (req, res) => {
     }
 
     // Respond with the list of saved products
-    res.status(201).json({ message: 'Products added successfully', products: savedProducts });
+    res.status(201).json({message: 'Products added successfully', products: savedProducts});
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error', error });
+    res.status(500).json({message: 'Internal server error', error});
   }
 };
 
 
 exports.addReview = async (req, res) => {
-    const productId = req.params.id;
-    const { comment, rating, reviewerName, reviewerEmail } = req.body; // Destructure the required fields
+  const productId = req.params.id;
+  const {comment, rating, reviewerName, reviewerEmail} = req.body; // Destructure the required fields
 
-    // Validate input
-    if (!comment || !rating || rating < 1 || rating > 5 || !reviewerName || !reviewerEmail) {
-        return res.status(400).json({ message: 'Invalid review data' });
+  // Validate input
+  if (!comment || !rating || rating < 1 || rating > 5 || !reviewerName || !reviewerEmail) {
+    return res.status(400).json({message: 'Invalid review data'});
+  }
+
+  try {
+    // Find the product and add the review
+    const product = await Product.findOne({productId: productId});
+
+    if (!product) {
+      return res.status(404).json({message: 'Product not found'});
     }
 
-    try {
-        // Find the product and add the review
-        const product = await Product.findOne({ productId: productId });
+    // Create a review object
+    const review = {
+      comment,
+      rating,
+      date: new Date(),
+      reviewerName, // Add the reviewer name
+      reviewerEmail, // Add the reviewer email
+    };
 
-        if (!product) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
+    // Push the review to the reviews array
+    product.reviews.unshift(review);
 
-        // Create a review object
-        const review = {
-            comment,
-            rating,
-            date: new Date(),
-            reviewerName, // Add the reviewer name
-            reviewerEmail, // Add the reviewer email
-        };
-
-        // Push the review to the reviews array
-        product.reviews.unshift(review);
-
-        // Optionally, update review count and average rating here if needed
-        product.ratingCount = product.ratingCount  + 1;
-        product.rating = parseFloat(((product.rating * (product.ratingCount - 1) + rating) / product.ratingCount).toFixed(2));
+    // Optionally, update review count and average rating here if needed
+    product.ratingCount = product.ratingCount + 1;
+    product.rating = parseFloat(((product.rating * (product.ratingCount - 1) + rating) / product.ratingCount).toFixed(2));
 
 
-        // Save the updated product
-        await product.save();
+    // Save the updated product
+    await product.save();
 
-        // Return the updated product with the new review
-        res.status(201).json(product);
-    } catch (error) {
-        console.error('Error adding review:', error);
-        res.status(500).json({ message: error });
-    }
+    // Return the updated product with the new review
+    res.status(201).json(product);
+  } catch (error) {
+    console.error('Error adding review:', error);
+    res.status(500).json({message: error});
+  }
 };
 
 exports.deleteProduct = async (req, res) => {
-    try {
-        const productId = req.params.id; // Get the product ID from the request parameters
+  try {
+    const productId = req.params.id; // Get the product ID from the request parameters
 
-        // Check if product ID is provided
-        if (!productId) {
-            return res.status(400).json({ message: 'Product ID is required' });
-        }
-
-        // Find the product by ID and delete it
-        const deletedProduct = await Product.findOneAndDelete({ productId: productId });
-
-        if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
-        }
-
-        // Return a success response
-        res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
-    } catch (error) {
-        console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Internal server error', error });
+    // Check if product ID is provided
+    if (!productId) {
+      return res.status(400).json({message: 'Product ID is required'});
     }
+
+    // Find the product by ID and delete it
+    const deletedProduct = await Product.findOneAndDelete({productId: productId});
+
+    if (!deletedProduct) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+
+    // Return a success response
+    res.status(200).json({message: 'Product deleted successfully', product: deletedProduct});
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({message: 'Internal server error', error});
+  }
+};
+
+exports.updateProductStock = async (req, res) => {
+  const productId = req.params.productId;
+  const {stock} = req.body; // Get the new stock value from the request body
+
+  try {
+    // Find the product by ID and update its stock
+    const updatedProduct = await Product.findOneAndUpdate(
+      {productId: productId}, // Find product by ID
+      {stock}, // Update stock
+      {new: true} // Return the updated product
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({message: 'Product not found'});
+    }
+
+    // Send the updated product back as a response
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Server error', error: error.message});
+  }
 };

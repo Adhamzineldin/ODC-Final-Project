@@ -5,6 +5,7 @@
   font-family: 'Arial', sans-serif;
 }
 
+/* Tabs */
 .tabs {
   display: flex;
   justify-content: center;
@@ -50,7 +51,8 @@ label {
   margin-bottom: 5px;
 }
 
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
@@ -58,7 +60,8 @@ input, textarea {
   transition: border-color 0.3s ease;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   border-color: #007bff;
   outline: none;
 }
@@ -67,36 +70,22 @@ textarea {
   resize: vertical;
 }
 
-/* Image Preview Styling */
-.image-previews {
-  margin-top: 20px;
-}
-
-.image-preview-container {
+/* Button Container */
+.button-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  justify-content: space-between; /* Space between buttons */
+  margin-top: 20px; /* Space above buttons */
 }
 
-.image-preview-item img {
-  width: 120px;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Buttons */
-button {
+/* Primary Button */
+.btn-primary {
+  background-color: #28a745;
+  color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-}
-
-.btn-primary {
-  background-color: #28a745;
-  color: white;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -105,9 +94,15 @@ button {
   transform: translateY(-2px);
 }
 
+/* Delete Button */
 .btn-delete {
   background-color: #dc3545;
   color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -148,4 +143,19 @@ button {
 
 .product-item:hover {
   transform: translateY(-5px);
+}
+
+/* Stock Input Styling */
+.stock-input {
+  width: calc(100% - 30px);
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.stock-input:focus {
+  border-color: #007bff;
+  outline: none;
 }

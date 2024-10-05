@@ -4,7 +4,7 @@
       Add Product
     </button>
     <button class="tab-button" [class.active]="selectedTab === 'deleteProduct'" (click)="selectTab('deleteProduct')">
-      Delete Product
+      Modify Products
     </button>
   </div>
 
@@ -63,7 +63,18 @@
           <h4>{{ product.title }}</h4>
           <p><strong>Stock:</strong> {{ product.stock }}</p>
           <p><strong>Category:</strong> {{ product.category }}</p>
-          <button (click)="deleteProduct(product.productId)" class="btn-delete">Delete</button>
+          <div class="button-container">
+            <button (click)="confirmDelete(product.productId)" class="btn-delete">Delete</button>
+            <button (click)="addStock(product.productId)" class="btn-primary">Change Stock Value</button>
+          </div>
+
+          <div class="form-group">
+            <label for="stockIncrement">Change Stock</label>
+            <input type="number" id="stockIncrement" [(ngModel)]="stockIncrement" placeholder="Change Stock"
+                   class="stock-input"/>
+
+          </div>
+          <!-- Add this line -->
         </div>
       </div>
     </div>

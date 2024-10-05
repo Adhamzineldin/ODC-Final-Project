@@ -12,7 +12,7 @@
           <span class="rating-count">({{ product.ratingCount }})</span>
         </div>
         <div class="product-price">{{ product.price | currency:'USD' }}</div>
-        <button *ngIf="isAdmin" (click)="deleteProduct(product.productId)" class="btn-delete">Delete</button>
+        <button *ngIf="isAdmin" (click)="confirmDelete(product.productId)" class="btn-delete">Delete</button>
         <a [routerLink]="['/product', product.productId]" class="product-link">View Details</a>
       </div>
     </div>
