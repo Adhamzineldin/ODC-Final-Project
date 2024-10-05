@@ -1,5 +1,7 @@
 const express = require('express');
-const {addUser, updatePassword, verifyUser, sendCodeToEmail, loginUser, addToCart, getCarts} = require("../controllers/userController");
+const {addUser, updatePassword, verifyUser, sendCodeToEmail, loginUser, addToCart, getCarts, updateCart, updateOrder,
+  getOrders, getOrder
+} = require("../controllers/userController");
 const router = express.Router();
 
 
@@ -18,6 +20,15 @@ router.post('/login', loginUser);
 router.post('/add-to-cart', addToCart);
 
 router.get('/cart/:userId', getCarts);
+
+router.put('/cart/:userId', updateCart);
+
+router.put('/orders/:userId', updateOrder);
+
+router.get('/orders/:userId', getOrders);
+
+router.get('/orders/order/:userId', getOrder);
+
 module.exports = router;
 
 

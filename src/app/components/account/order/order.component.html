@@ -1,0 +1,23 @@
+<div class="order-container">
+  <h2>Order Details</h2>
+ <div class="order-info">
+  <p><strong>Order Number: </strong> <span>{{ orderData.orderNumber }}</span></p>
+  <p><strong>Date Ordered: </strong> <span>{{ orderData.orderDate | date: 'shortDate' }}</span></p>
+  <p><strong>Status: </strong> <span>{{ orderData.orderStatus }}</span></p>
+</div>
+
+  <div class="products-section">
+    <h3>Products</h3>
+    <ul>
+      <li *ngFor="let product of orderData.products" class="product-item">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-image"/>
+        <span><a [routerLink]="['/product', product.productId]">{{ product.name }} </a>  </span>
+        <span>Quantity: {{ product.quantity }}</span>
+        <span>${{ product.price.toFixed(2) }}</span>
+      </li>
+    </ul>
+    <p class="total-price"><strong>Total Price:</strong> ${{ totalPrice.toFixed(2) }}</p>
+  </div>
+
+  <button (click)="downloadReceipt()" class="download-btn">Download Receipt</button>
+</div>

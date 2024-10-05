@@ -1,0 +1,207 @@
+/* Profile Container Styling */
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff; /* Changed to white for contrast */
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
+  font-family: 'Arial', sans-serif;
+}
+
+/* General Headings */
+.profile-container h2,
+.profile-container h3 {
+  text-align: center;
+  color: #333;
+  margin: 15px 0; /* Added margin for spacing */
+}
+
+/* Tabs Styling */
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #007bff;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333; /* Default text color */
+  transition: color 0.3s, border-bottom 0.3s;
+  text-align: center; /* Center align tab text */
+  position: relative; /* For adding underline */
+}
+
+.tab-button:hover,
+.tab-button.active {
+  color: #007bff; /* Active color */
+}
+
+.tab-button.active {
+  border-bottom: 2px solid #007bff; /* Active tab underline */
+}
+
+/* Tab Content Styling */
+.tab-content {
+  padding: 20px;
+  background: #f8f9fa; /* Light background for content area */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile Section Styling */
+.profile-section {
+  margin-bottom: 40px;
+}
+
+.profile-section p {
+  font-size: 1.1rem;
+  color: #555;
+  padding: 8px 0;
+}
+
+.profile-section p strong {
+  color: #333;
+}
+
+/* Orders Section Styling */
+.orders-section {
+  margin-bottom: 40px;
+}
+
+.order-item {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.order-item:hover {
+  transform: translateY(-5px);
+}
+
+.order-item p {
+  font-size: 1rem;
+  color: #666;
+  margin: 8px 0;
+}
+
+.orders-section p strong {
+  color: #333;
+}
+
+/* No Orders Message */
+.noOrders p {
+  font-size: 1.1rem;
+  color: #777;
+  text-align: center;
+}
+
+/* Password Change Section */
+.password-section {
+  margin-bottom: 40px; /* Spacing for better separation */
+}
+
+.password-section form {
+  background-color: #ffffff; /* Changed to white for contrast */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.password-section label {
+  display: block;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.password-section input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.password-section input:focus {
+  border-color: #007bff; /* Change border color on focus */
+}
+
+.password-section button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.password-section button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  .profile-section p,
+  .order-item p,
+  .password-section label {
+    font-size: 1rem;
+  }
+
+  .password-section input,
+  .password-section button {
+    font-size: 0.9rem;
+  }
+}
+
+.btn-go-to-orders {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+/* Hover effects */
+.btn-go-to-orders:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Active state */
+.btn-go-to-orders:active {
+    transform: scale(0.95);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .btn-go-to-orders {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

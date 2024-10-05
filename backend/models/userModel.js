@@ -15,6 +15,40 @@ const cartItemSchema = new mongoose.Schema({
   quantity: { type: Number, required: true, default: 1 }, // Quantity of the product
 });
 
+const orderSchema = new mongoose.Schema({
+  orderNumber: {
+    type: Number,
+    unique: true
+  },
+  products: {
+    type: [cartItemSchema],
+    default: []
+  }, // Array of products in the order
+  total: {
+    type: Number,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'shipped', 'delivered', 'canceled'],
+    default: 'pending',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+
+  },
+  updatedAt: {
+    type: Date
+  }
+});
+
+// Middleware to update the `updatedAt` field before saving
+orderSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
 
 // Define the schema
 const userSchema = new mongoose.Schema({
@@ -30,6 +64,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   roles: { type: [String], default: ['user'] },
   cart: { type: [cartItemSchema], default: [] },
+  orders : { type: [orderSchema], default: [] },
 });
 
 userSchema.pre('save', function(next) {
@@ -52,7 +87,7 @@ userSchema.pre('save', function(next) {
 
 
 userSchema.plugin(AutoIncrement, { inc_field: 'userId' }); // Apply auto-increment on 'id'
-
+orderSchema.plugin(AutoIncrement, { inc_field: 'orderNumber' });
 
 
 // Create the model

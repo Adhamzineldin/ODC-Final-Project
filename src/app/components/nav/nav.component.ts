@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NgIf, NgOptimizedImage} from "@angular/common";
-import {AppComponent} from "../../../app.component";
-import {User} from "../../../../services/models/userModel";
-import {AuthService} from "../../../../services/product/auth.service";
+import {AppComponent} from "../../app.component";
+import {User} from "../../../services/models/userModel";
+import {AuthService} from "../../../services/product/auth.service";
 import {Router, RouterLink} from "@angular/router";
 
 @Component({
@@ -39,13 +39,14 @@ export class NavComponent  {
    signOut() {
     localStorage.removeItem('user');
     this.user = null;
-    this.router.navigate(['/']);
-     window.location.href = '/';
+    window.location.href = '/';
+
+
 
    }
   getAccountRoute() {
     if (this.getIsLoggedIn()) {
-      return '/';
+      return '/profile';
     } else {
       return '/login';
     }

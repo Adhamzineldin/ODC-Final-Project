@@ -4,6 +4,8 @@ const Product = require('../models/productModel');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
+const {getProductById} = require("./productController");
+
 
 // Add a new user (Register)
 exports.addUser = async (req, res) => {
@@ -50,18 +52,19 @@ exports.addUser = async (req, res) => {
 // Update user password
 exports.updatePassword = async (req, res) => {
   try {
+    console.log(req.body);
     const { email, oldPassword, newPassword } = req.body;
 
     // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(200).json({ message: 'User not found' });
     }
 
     // Check if the old password is correct
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Incorrect old password' });
+      return res.status(200).json({ message: 'Incorrect old password' });
     }
 
     // Hash the new password
@@ -75,8 +78,8 @@ exports.updatePassword = async (req, res) => {
 
     res.status(200).json({ message: 'Password updated successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
+    console.log(error);
+    res.status(500).json({ message: error });
   }
 };
 
@@ -120,8 +123,8 @@ exports.sendCodeToEmail = async (req, res) => {
         }
 
         // Replace {{code}} with the actual verification code
-        const htmlWithCode = html.replace('{{code}}', code);
-
+        let htmlWithCode = html.replace('{{code}}', code);
+        htmlWithCode = htmlWithCode.replace('{{email}}', email);
         // Create mail options
         const mailOptions = {
             from: process.env.EMAIL, // Sender's email address
@@ -250,3 +253,144 @@ exports.getCarts = async (req, res) => {
   }
 };
 
+exports.updateCart = async (req, res) => {
+  try {
+    const { userId } = req.params; // Extract userId from the URL parameters
+    const { updatedCart } = req.body; // The updated cart data is sent in the request body
+
+    // Validate that each item in the cart has a valid product and quantity
+    if (!Array.isArray(updatedCart) || updatedCart.some(item => !item.productId || !item.quantity)) {
+      return res.status(400).json({ message: 'Invalid cart data. Each item must have a productId and quantity.' });
+    }
+
+    // Find the user by ID
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Map the updated cart data to match the user's cart structure
+    user.cart = updatedCart.map(item => ({
+      product: item.productId,  // Ensure product is set properly
+      quantity: item.quantity
+    }));
+
+    // Save the updated user data to the database
+    await user.save();
+
+    // Respond with the updated cart and a success message
+    res.status(200).json({
+      message: 'Cart updated successfully',
+      cart: user.cart
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update cart', error });
+  }
+};
+
+exports.updateOrder = async (req, res) => {
+  try {
+    const { userId } = req.params; // Extract userId from the URL parameters
+    const { updatedOrder } = req.body; // The updated order data is sent in the request body
+
+    // Find the user by ID
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Loop through the products in the updated order
+    for (const product of updatedOrder.products) {
+      // Find the product by ID
+      const foundProduct = await Product.findOne({productId: product.product}); // Assuming productId is available
+
+      if (!foundProduct) {
+        console.log(product);
+        return res.status(404).json({ message: `Product with ID ${product.productId} not found` });
+      }
+
+      // Check if enough stock is available
+      if (foundProduct.stock < product.quantity) {
+        return res.status(400).json({ message: `Insufficient stock for product: ${foundProduct.name}` });
+      }
+
+      // Deduct the ordered quantity from the product stock
+      foundProduct.stock -= product.quantity;
+
+      // Update the stock status
+      if (foundProduct.stock <= 0) {
+        foundProduct.availabilityStatus = 'Out Of Stock'; // Update to Out Of Stock if stock is 0
+      } else if (foundProduct.stock < 20) {
+        foundProduct.availabilityStatus = 'Low Stock'; // Update to Low Stock if stock is less than 20
+      } else {
+        foundProduct.availabilityStatus = 'In Stock'; // Update to In Stock if sufficient stock remains
+      }
+
+      // Save the updated product information
+      await foundProduct.save();
+    }
+
+    // Create a new order based on the updatedOrder received
+    const newOrder = {
+      products: updatedOrder.products, // Directly take the products array
+      total: updatedOrder.total,       // Take the total from updatedOrder
+      status: updatedOrder.status || 'pending', // Default to 'pending' if no status is provided
+    };
+
+    // Push the new order to the user's orders array
+    user.orders.push(newOrder);
+
+    // Save the updated user data to the database
+    await user.save();
+
+    // Respond with the updated orders and a success message
+    res.status(200).json({
+      message: 'Order updated successfully',
+      orders: user.orders // Return the updated orders array
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to update order', error });
+  }
+};
+
+exports.getOrders = async (req, res) => {
+  try {
+    const {userId} = req.params;
+
+    // Find the user by ID and populate the orders with product details
+    const user = await User.findOne({userId})
+    const orders = user.orders;
+    res.status(200).json({
+      message: 'Orders retrieved successfully',
+      orders
+    });
+    }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error });
+  }
+}
+
+exports.getOrder = async (req, res) => {
+  try {
+    const {userId} = req.params;
+    const orderNumber = req.query.orderNumber;
+  console.log(orderNumber);
+    // Find the user by ID and populate the orders with product details
+    const user = await User.findOne({userId})
+    const orders = user.orders;
+    const order = orders.filter(order => Number(order.orderNumber) === Number(orderNumber))[0];
+    res.status(200).json({
+      message: 'Orders retrieved successfully',
+      order
+    });
+    }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error });
+  }
+}

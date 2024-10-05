@@ -20,10 +20,12 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "jspdf": "^2.5.1",
     "mongoose": "^8.6.3",
     "mongoose-sequence": "^6.0.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
+    "pdfmake": "^0.2.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
@@ -33,13 +35,14 @@
     "@angular/cli": "^18.2.7",
     "@angular/compiler-cli": "^18.2.7",
     "@types/jasmine": "~5.1.0",
+    "@types/pdfmake": "^0.2.9",
     "concurrently": "^9.0.1",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
+    "karma-jasmine": "^4.0.2",
+    "karma-jasmine-html-reporter": "^1.7.0",
     "typescript": "~5.5.2"
   }
 }

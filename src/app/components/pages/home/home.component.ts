@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../../services/product/product.service';
-import { NavComponent } from "../nav/nav.component";
+import { NavComponent } from "../../nav/nav.component";
 import { CategoryComponent } from "../category/category.component";
 import { RouterOutlet } from "@angular/router";
 import { NgForOf } from "@angular/common";

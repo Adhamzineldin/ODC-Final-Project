@@ -32,6 +32,10 @@ export class SignupComponent {
       alert('Passwords do not match!');
       return;
     }
+    else if (this.password.length < 7) {
+      alert('Password must be at least 7 characters long!');
+      return;
+    }
 
     const userData: User = {
       userId: 0,
@@ -43,7 +47,8 @@ export class SignupComponent {
       createdAt: new Date(),
       isActive: true,
       roles: ['user'],
-      cart: []
+      cart: [],
+      orders: [],
     };
 
     this.authService.register(userData).subscribe({

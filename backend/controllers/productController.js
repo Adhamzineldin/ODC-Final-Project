@@ -15,7 +15,7 @@ exports.getProductById = async (req, res) => {
   try {
     const product = await Product.findOne({ productId: req.params.id });
     if (product) {
-      res.status(200).json(product);
+      res.status(200).json( product);
     } else {
       res.status(404).json({ message: 'Product not found' });
     }

@@ -4,6 +4,7 @@ import {User} from "../models/userModel";
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
 import {AppComponent} from "../../app/app.component";
+import {Product} from "../models/productModel";
 
 @Injectable({
   providedIn: 'root'
@@ -118,5 +119,52 @@ export class AuthService {
     return this.http.get<any>(`${AppComponent.api}/products/product/${productId}`);
    }
 
+   updateUserCart(updatedCart: { productId: number, quantity: number }[]) {
+  const userId = this.getCurrentUser()?.userId; // Assuming you have a method to get the user's ID
+  return this.http.put(`${AppComponent.api}/users/cart/${userId}`, { updatedCart });
+  }
 
+  // Change password
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    const email = this.getCurrentUser()?.email;
+    return this.http.put(`${AppComponent.api}/users/update-password`, {email, oldPassword, newPassword });
+  }
+
+  updateOrder(userId: number, updatedOrder: any): Observable<any> {
+      console.log('updatedOrder', updatedOrder);
+    return this.http.put<any>(`${AppComponent.api}/users/orders/${userId}`, {"updatedOrder": updatedOrder});
+  }
+
+
+  getOrders(userId: number | undefined): Observable<any> {
+    return this.http.get<any>(`${AppComponent.api}/users/orders/${userId}`);
+  }
+
+
+  getOrderDetails(orderNumber: string) {
+      const userId = this.getCurrentUser()?.userId;
+    return this.http.get<any>(`${AppComponent.api}/users/orders/order/${userId}?orderNumber=${orderNumber}`);
+  }
+
+//   admin
+   getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(AppComponent.api);
+  }
+
+  deactivateUser(userId: string): Observable<void> {
+    return this.http.delete<void>(`${AppComponent.api}/${userId}/deactivate`);
+  }
+
+  addProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(AppComponent.api, product);
+  }
+
+  deleteProduct(productId: number): Observable<void> {
+    return this.http.delete<void>(`${AppComponent.api}/${productId}`);
+  }
+
+
+  getProducts() {
+     return this.http.get<Product[]>(`${AppComponent.api}/products`)
+  }
 }

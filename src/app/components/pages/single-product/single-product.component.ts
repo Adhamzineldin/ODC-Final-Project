@@ -100,8 +100,13 @@ export class SingleProductComponent implements OnInit {
                 this.renderer.appendChild(container, descriptionElement);
               }
               const addToCartButton = this.renderer.createElement('button');
-    this.renderer.addClass(addToCartButton, 'add-to-cart-btn'); // Use your CSS class name
-    addToCartButton.textContent = 'Add to Cart';
+              this.renderer.addClass(addToCartButton, 'add-to-cart-btn'); // Use your CSS class name
+              if (product.stock < 1 || product.availabilityStatus === 'Out of stock') {
+                  addToCartButton.disabled = true;
+                  addToCartButton.textContent = 'Out of Stock';
+              }else {
+                addToCartButton.textContent = 'Add to Cart';
+              }
 
     // Add click event listener
     this.renderer.listen(addToCartButton, 'click', () => this.addToCart(product.productId));
@@ -388,23 +393,36 @@ private createReviewForm(): HTMLElement {
 
 
   // Function to add item to the cart
-  addToCart(productId: number): void {
-    if (this.authService.isLoggedIn()) {
-      this.authService.addProductToCart(productId).subscribe(
-        (response) => {
-          console.log('Product added to cart:', response);
-          alert('Product added to cart successfully');
+addToCart(productId: number): void {
+    // Fetch the product details from the backend or from local state
+    this.authService.getProductDetails(productId).subscribe(
+        (product) => {
+            // Check if there is sufficient stock before adding to the cart
+            if (product.stock > 0) {
+                if (this.authService.isLoggedIn()) {
+                    this.authService.addProductToCart(productId).subscribe(
+                        (response) => {
+                            console.log('Product added to cart:', response);
+                            alert('Product added to cart successfully');
+                        },
+                        (error) => {
+                            console.error('Error adding product to cart:', error);
+                            alert(error.message);
+                        }
+                    );
+                } else {
+                    alert('Please log in to add items to the cart');
+                }
+            } else {
+                alert('Sorry, this product is out of stock');
+            }
         },
         (error) => {
-          console.error('Error adding product to cart:', error);
-          alert(error.message);
+            console.error('Error fetching product details:', error);
+            alert('Could not retrieve product details. Please try again later.');
         }
-      );
-    }
-    else {
-      alert('Please log in to add items to the cart');
-    }
-  }
+    );
+}
 
 
 }

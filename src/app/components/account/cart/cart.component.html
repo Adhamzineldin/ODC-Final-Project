@@ -4,10 +4,10 @@
   <div class="cart-items">
     <div class="cart-item" *ngFor="let item of cartItems">
       <div class="cart-item-image">
-        <img src="{{ getLink(item.product.images) }}" [alt]="item.product.title" />
+        <img src="{{ getLink(item.product.images) }}" [alt]="item.product.title"/>
       </div>
       <div class="cart-item-details">
-        <h3>{{ item.product.title }}</h3>
+        <h3><a [routerLink]="['/product', item.product.productId]">{{ item.product.title }}</a></h3>
         <p class="cart-item-price">{{ item.product.price | currency:'USD' }}</p>
         <div class="cart-item-quantity">
           <button (click)="decreaseQuantity(item)">-</button>
@@ -30,6 +30,6 @@
   </div>
 
   <div class="checkout-btn" *ngIf="cartItems.length > 0">
-    <button>Proceed to Checkout</button>
-  </div>
+  <button (click)="checkout()">Proceed to Checkout</button>
+</div>
 </div>

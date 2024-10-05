@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/pages/home/home.component';
-import { LoginComponent } from './components/pages/login/login.component';
-import { SignupComponent } from './components/pages/signup/signup.component';
-import { ProfileComponent } from './components/pages/profile/profile.component';
+import { LoginComponent } from './components/account/login/login.component';
+import { SignupComponent } from './components/account/signup/signup.component';
+import { ProfileComponent } from './components/account/profile/profile.component';
 import {SingleProductComponent} from "./components/pages/single-product/single-product.component";
-import {VerificationComponent} from "./components/pages/verification/verification.component";
-import {CartComponent} from "./components/pages/cart/cart.component";
+import {VerificationComponent} from "./components/account/verification/verification.component";
+import {CartComponent} from "./components/account/cart/cart.component";
 import {NotFoundComponent} from "./components/not-found/not-found.component";
+import {OrderComponent} from "./components/account/order/order.component";
+import {MainComponent} from "./components/admin/main/main.component";
 
 
 
@@ -19,6 +21,9 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   {path: 'verification', component: VerificationComponent},
   {path: 'cart', component: CartComponent},
+  {path: 'profile', component: ProfileComponent},
+  {path: 'order/:orderNumber', component: OrderComponent},
+  { path: 'admin', component: MainComponent },
   {path: '**', component: NotFoundComponent}
 ];
 
