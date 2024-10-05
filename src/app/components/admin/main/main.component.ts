@@ -42,7 +42,7 @@ export class MainComponent implements OnInit {
   private selectedFiles: any;
   categories: string[] = [];
   productsByCategory: { [key: string]: any[] } = {};
-
+  isAdmin: boolean | undefined = false;
 
   constructor(private authService: AuthService, private productService: ProductService) {
   }
@@ -52,6 +52,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.loadProducts();
     this.loadCategories();
+    this.isAdmin = this.authService.isAdmin();
   }
 
   loadProducts(): void {
@@ -203,6 +204,7 @@ export class MainComponent implements OnInit {
   }
 
   // Function to update stock in the database (you need to implement this in your service)
+
 
   private updateStockInDatabase(productId: number, newStock: number): void {
     this.authService.updateProductStock(productId, newStock).subscribe(

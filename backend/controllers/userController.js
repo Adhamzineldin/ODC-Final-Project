@@ -10,18 +10,20 @@ const {getProductById} = require("./productController");
 // Add a new user (Register)
 exports.addUser = async (req, res) => {
   try {
-    const {username, email, password, firstName, lastName, dateOfBirth} = req.body;
+    const {username, email, password, firstName, lastName} = req.body; // Destructure orders from req.body
+    console.log(req.body);
 
     // Check if the email is already registered
     const existingMail = await User.findOne({email});
     const existingUsername = await User.findOne({username});
+
     if (existingMail) {
       return res.status(400).json({message: 'User with this email already exists'});
     }
+
     if (existingUsername) {
       return res.status(400).json({message: 'User with this username already exists'});
     }
-
 
     // Hash the password before saving
     const salt = await bcrypt.genSalt(10);
@@ -36,8 +38,11 @@ exports.addUser = async (req, res) => {
       lastName,
       createdAt: new Date(),
       isActive: true,
-      roles: ['user'] // Default role
+      roles: ['user']
     });
+
+    console.log(newUser);
+
 
     // Save the user in the database
     await newUser.save();
@@ -82,6 +87,37 @@ exports.updatePassword = async (req, res) => {
     res.status(500).json({message: error});
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    console.log(req.body);
+    const {email, newPassword} = req.body;
+    console.log(email, newPassword);
+
+
+    // Find the user by email
+    const user = await User.findOne({email});
+    if (!user) {
+      return res.status(200).json({message: 'User not found'});
+    }
+
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password
+    user.password = hashedNewPassword;
+    user.updatedAt = new Date();
+    await user.save();
+
+    res.status(200).json({message: 'Password updated successfully'});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: error});
+  }
+};
+
 
 exports.verifyUser = async (req, res) => {
   try {
@@ -174,6 +210,7 @@ exports.loginUser = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         roles: user.roles,
+        isVerified: user.isVerified,
         // Add any other fields you want to include
       }
       // token // Include token if you implemented JWT authentication
@@ -362,15 +399,22 @@ exports.getOrders = async (req, res) => {
     const {userId} = req.params;
 
     // Find the user by ID and populate the orders with product details
-    const user = await User.findOne({userId})
-    const orders = user.orders;
+    const user = await User.findOne({userId});
+
+    if (!user) {
+      return res.status(404).json({message: 'User not found'});
+    }
+
+    // Get orders excluding the first one
+    const orders = user.orders.slice(1); // This will return all orders except the first one
+
     res.status(200).json({
       message: 'Orders retrieved successfully',
       orders
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({message: error});
+    res.status(500).json({message: error.message});
   }
 }
 

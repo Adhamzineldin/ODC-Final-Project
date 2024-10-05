@@ -39,7 +39,7 @@ export class NavComponent {
   }
 
   getIsLoggedIn() {
-    return this.user;
+    return this.user && this.user.isVerified;
   }
 
   signOut() {

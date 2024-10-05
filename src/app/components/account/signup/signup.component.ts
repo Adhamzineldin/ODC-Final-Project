@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {AuthService} from "../../../../services/product/auth.service";
 import {User} from "../../../../services/models/userModel";
 import {FormsModule} from "@angular/forms";
@@ -11,7 +11,8 @@ import {AppComponent} from "../../../app.component";
   templateUrl: './signup.component.html',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   styleUrls: ['./signup.component.css']
 })
@@ -31,8 +32,7 @@ export class SignupComponent {
     if (this.password !== this.confirmPassword) {
       alert('Passwords do not match!');
       return;
-    }
-    else if (this.password.length < 7) {
+    } else if (this.password.length < 7) {
       alert('Password must be at least 7 characters long!');
       return;
     }
@@ -46,6 +46,7 @@ export class SignupComponent {
       lastName: this.lastName,
       createdAt: new Date(),
       isActive: true,
+      isVerified: false,
       roles: ['user'],
       cart: [],
       orders: [],

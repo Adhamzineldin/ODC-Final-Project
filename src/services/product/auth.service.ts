@@ -25,7 +25,11 @@ export class AuthService {
 
 
   getCurrentUser(): User | null {
-    return this.user; // Return user data
+    return this.user && this.user.isVerified ? this.user : null;
+  }
+
+  getUserEmail(): string {
+    return this.user?.email || '';
   }
 
   // Method to set user when logged in
@@ -35,7 +39,11 @@ export class AuthService {
   }
 
   register(userData: User): Observable<any> {
+    // Convert username to lowercase
     userData.username = userData.username.toLowerCase();
+
+
+    console.log('userData', userData); // Log the modified userData
     return this.http.post(`${AppComponent.api}/users/register`, userData);
   }
 
@@ -131,6 +139,10 @@ export class AuthService {
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
     const email = this.getCurrentUser()?.email;
     return this.http.put(`${AppComponent.api}/users/update-password`, {email, oldPassword, newPassword});
+  }
+
+  forgotPassword(email: string, newPassword: string): Observable<any> {
+    return this.http.post(`${AppComponent.api}/users/forgot-password`, {email: email, newPassword: newPassword});
   }
 
   updateOrder(userId: number, updatedOrder: any): Observable<any> {

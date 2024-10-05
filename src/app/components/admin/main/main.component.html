@@ -1,4 +1,4 @@
-<div class="admin-page">
+<div *ngIf="isAdmin" class="admin-page">
   <div class="tabs">
     <button class="tab-button" [class.active]="selectedTab === 'addProduct'" (click)="selectTab('addProduct')">
       Add Product
