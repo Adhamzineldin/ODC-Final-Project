@@ -1,6 +1,7 @@
 const express = require('express');
-const {addUser, updatePassword, verifyUser, sendCodeToEmail, loginUser, addToCart, getCarts, updateCart, updateOrder,
-  getOrders, getOrder
+const {
+  addUser, updatePassword, verifyUser, sendCodeToEmail, loginUser, addToCart, getCarts, updateCart, updateOrder,
+  getOrders, getOrder, sendOrderDetailsEmail
 } = require("../controllers/userController");
 const router = express.Router();
 
@@ -14,6 +15,7 @@ router.put('/update-password', updatePassword);
 router.post('/verify-email', verifyUser);
 
 router.post('/send-verification-code', sendCodeToEmail);
+router.post('/sendEmail', sendOrderDetailsEmail);
 
 router.post('/login', loginUser);
 

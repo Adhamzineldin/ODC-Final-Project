@@ -174,4 +174,10 @@ export class AuthService {
   isAdmin() {
     return this.getCurrentUser()?.roles.includes('admin');
   }
+
+  sendEmail(userId: number, emailContent: string) {
+    const email = this.getCurrentUser()?.email;
+    console.log('sending email');
+    return this.http.post(`${AppComponent.api}/users/sendEmail`, {htmlContent: emailContent, email});
+  }
 }

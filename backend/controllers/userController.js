@@ -392,3 +392,38 @@ exports.getOrder = async (req, res) => {
     res.status(500).json({message: error});
   }
 }
+
+
+exports.sendOrderDetailsEmail = async (req, res) => {
+  const {email, htmlContent} = req.body; // Extract email and htmlContent from the request body
+  console.log(req.body);
+
+  // Create transporter
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL, // Your email from AppComponent
+      pass: process.env.EMAIL_PASSWORD, // Your password from AppComponent
+    },
+  });
+
+  // Create mail options
+  const mailOptions = {
+    from: process.env.EMAIL, // Sender's email address
+    to: email, // Recipient's email
+    subject: 'Order Details And Confirmation',
+    html: htmlContent, // Use the HTML content passed from the car component
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8'
+    }
+  };
+
+  try {
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({message: 'Email sent successfully'});
+  } catch (error) {
+    console.error('Error sending email:', error);
+    res.status(500).json({error: error});
+  }
+};
