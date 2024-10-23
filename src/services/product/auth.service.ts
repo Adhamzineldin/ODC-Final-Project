@@ -93,7 +93,7 @@ export class AuthService {
 
   // Check if the user is logged in
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.getCurrentUser();
   }
 
   // Get the token

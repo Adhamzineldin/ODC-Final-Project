@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { NavComponent } from "./components/nav/nav.component";
-import { SingleProductComponent } from "./components/pages/single-product/single-product.component";
-import { HomeComponent } from "./components/pages/home/home.component";
-import { CategoryComponent } from "./components/pages/category/category.component";
-import { LoginComponent } from "./components/account/login/login.component";
-import { ProfileComponent } from "./components/account/profile/profile.component";
-import { SignupComponent } from "./components/account/signup/signup.component";
+import {RouterLink, RouterOutlet} from '@angular/router';
+import {NavComponent} from "./components/nav/nav.component";
+import {SingleProductComponent} from "./components/pages/single-product/single-product.component";
+import {HomeComponent} from "./components/pages/home/home.component";
+import {CategoryComponent} from "./components/pages/category/category.component";
+import {LoginComponent} from "./components/account/login/login.component";
+import {ProfileComponent} from "./components/account/profile/profile.component";
+import {SignupComponent} from "./components/account/signup/signup.component";
 import {VerificationComponent} from "./components/account/verification/verification.component";
 import {AuthService} from "../services/product/auth.service";
 
@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
   static emailPassword = 'uike gqor nymo nmdb';
   domain: string = '';
   ipAddress: string = ' ';
-
 
 
   constructor(private authService: AuthService) {
