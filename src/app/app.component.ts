@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     const base = this.document.querySelector('base');
     this.domain = window.location.hostname;
     if (base) {
-      if (this.domain === this.usedDomain) {
+      if (this.domain !== "localhost") {
         base.setAttribute('href', `/app${this.frontendPort}/`);
       }
     }
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // Get the domain
     this.domain = window.location.hostname;
-    if (this.domain !== this.usedDomain) {
-      AppComponent.api = `http://localhost:/${this.backendPort}/api`;
+    if (this.domain === "localhost") {
+      AppComponent.api = `http://localhost:${this.backendPort}/api`;
     } else {
       AppComponent.api = `https://${this.domain}/app${this.backendPort}/api`;
     }
