@@ -64,9 +64,12 @@ export class AppComponent implements OnInit {
     this.domain = window.location.hostname;
     if (this.domain === "localhost") {
       AppComponent.api = `http://localhost:${this.backendPort}/api`;
+    } else if (this.domain.includes("maayn.me")) {
+      AppComponent.api = `https://${this.domain}/api`;
     } else {
       AppComponent.api = `https://${this.domain}/app${this.backendPort}/api`;
     }
+
     console.log('Current domain:', this.domain);
   }
 
